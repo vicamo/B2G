@@ -45,7 +45,16 @@ if [ -n "$2" ]; then
 	git commit -m "manifest" &&
 	cd ..
 else
-	GITREPO="git://github.com/mozilla-b2g/b2g-manifest"
+	REMOTE=`git remote 2>/dev/null`
+	REMOTE_URL=`git config remote.$REMOTE.url 2>/dev/null`
+	if [ -n "${REMOTE_URL}" ]; then
+		if [ -z "${B2G_MANIFEST}" ]; then
+			B2G_MANIFEST="b2g-manifest"
+		fi
+		GITREPO="`dirname ${REMOTE_URL}`/${B2G_MANIFEST}"
+	else
+		GITREPO="git://github.com/mozilla-b2g/b2g-manifest"
+	fi
 fi
 
 echo MAKE_FLAGS=-j$((CORE_COUNT + 2)) > .tmp-config
