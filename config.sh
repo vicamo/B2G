@@ -83,6 +83,12 @@ case "$1" in
 	(cd device/qcom/otoro && ./extract-files.sh)
 	;;
 
+"mojito")
+	echo DEVICE=mojito >> .tmp-config &&
+	echo LUNCH=full-eng >> .tmp-config &&
+	repo_sync mojito
+	;;
+
 "pandaboard")
 	echo DEVICE=panda >> .tmp-config &&
 	repo_sync panda &&
