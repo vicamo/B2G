@@ -44,7 +44,7 @@ if [ -n "$2" ]; then
 	git add default.xml &&
 	git commit -m "manifest" &&
 	cd ..
-else
+elif [ -z "$GITREPO" ]; then
 	GITREPO="git://github.com/mozilla-b2g/b2g-manifest"
 fi
 
