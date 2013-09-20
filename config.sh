@@ -168,6 +168,12 @@ case "$1" in
 	repo_sync $1
 	;;
 
+"emulator-mips-jb"|"emulator-mips-kk")
+	echo DEVICE=generic_mips >> .tmp-config &&
+	echo LUNCH=full_mips-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
 "flo")
 	echo DEVICE=flo >> .tmp-config &&
 	repo_sync $1

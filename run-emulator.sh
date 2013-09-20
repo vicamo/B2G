@@ -18,14 +18,21 @@ if [ x"$GDBSERVER" != x"" ]; then
     TAIL_ARGS="$TAIL_ARGS -s -S"
 fi
 
-if [ "$DEVICE" = "generic_x86" ]; then
+case "$DEVICE" in
+  generic_x86)
     EMULATOR=$TOOLS_PATH/emulator-x86
     KERNEL=$B2G_HOME/prebuilts/qemu-kernel/x86/kernel-qemu
-else
+    ;;
+  generic_mips)
+    EMULATOR=$TOOLS_PATH/emulator-mips
+    KERNEL=$B2G_HOME/prebuilts/qemu-kernel/mips/kernel-qemu
+    ;;
+  *)
     EMULATOR=$TOOLS_PATH/emulator
     KERNEL=$B2G_HOME/prebuilts/qemu-kernel/arm/kernel-qemu-armv7
     TAIL_ARGS="$TAIL_ARGS -cpu cortex-a8"
-fi
+    ;;
+esac
 
 SDCARD_SIZE=${SDCARD_SIZE:-512M}
 SDCARD_IMG=${SDCARD_IMG:-${B2G_HOME}/out/target/product/${DEVICE}/sdcard.img}
