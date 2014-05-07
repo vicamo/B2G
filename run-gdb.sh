@@ -8,18 +8,46 @@ get_pid_by_name() {
 SCRIPT_NAME=$(basename $0)
 . load-config.sh
 
+case "`uname -s`" in
+   CYGWIN) HOST_OS=windows ;;
+   Darwin|Macintosh) HOST_OS=darwin ;;
+   Linux) HOST_OS=linux ;;
+   *) echo "Unknown host OS" && exit 1 ;;
+esac
+
+case "`uname -m`" in
+   *86*) HOST_ARCH=x86 ;;
+   *Power*) HOST_ARCH=ppc ;;
+   *) echo "Unknown host arch" && exit 1 ;;
+esac
+
+if [ "$HOST_OS" = "windows" ]; then
+   HOST_PREBUILT_TAG=$HOST_OS
+else
+   HOST_PREBUILT_TAG=$HOST_OS-$HOST_ARCH
+fi
+
+# TARGET_OS is always linux.
+case "$DEVICE" in
+   *x86*) TARGET_ARCH=x86 ;;
+   *) TARGET_ARCH=arm ;;
+esac
+
 ADB=${ADB:-adb}
 if [ ! -f "`which \"$ADB\"`" ]; then
-	ADB=out/host/`uname -s | tr "[[:upper:]]" "[[:lower:]]"`-x86/bin/adb
+	ADB=out/host/$HOST_PREBUILT_TAG/bin/adb
 fi
 echo "ADB Location: " $ADB
 
 if [ -z "${GDB}" ]; then
    if [ -d prebuilt ]; then
-      GDB=prebuilt/$(uname -s | tr "[[:upper:]]" "[[:lower:]]")-x86/toolchain/arm-linux-androideabi-4.4.x/bin/arm-linux-androideabi-gdb
+      GDB=prebuilt/$HOST_PREBUILT_TAG/toolchain/arm-linux-androideabi-4.4.x/bin/arm-linux-androideabi-gdb
    elif [ -d prebuilts ]; then
-      GDB=prebuilts/gcc/$(uname -s | tr "[[:upper:]]" "[[:lower:]]")-x86/arm/arm-linux-androideabi-4.7/bin/arm-linux-androideabi-gdb
-      PYTHON_DIR=prebuilts/python/$(uname -s | tr "[[:upper:]]" "[[:lower:]]")-x86/2.7.5
+      case "$TARGET_ARCH" in
+         arm) GDB=prebuilts/gcc/$HOST_PREBUILT_TAG/arm/arm-linux-androideabi-4.7/bin/arm-linux-androideabi-gdb ;;
+         x86) GDB=prebuilts/gcc/$HOST_PREBUILT_TAG/x86/i686-linux-android-4.7/bin/i686-linux-android-gdb ;;
+      esac
+      PYTHON_DIR=prebuilts/python/$HOST_PREBUILT_TAG/2.7.5
       if [ -d $PYTHON_DIR ]; then
         export PYTHONHOME=$PYTHON_DIR
       fi
