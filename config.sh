@@ -174,6 +174,18 @@ case "$1" in
 	repo_sync $1
 	;;
 
+"butterfish"|"butterfish-jb"|"butterfish-kk")
+	echo DEVICE=generic >> .tmp-config &&
+	echo LUNCH=full-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
+"butterfish-x86"|"butterfish-x86-jb"|"butterfish-x86-kk")
+	echo DEVICE=generic_x86 >> .tmp-config &&
+	echo LUNCH=full_x86-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
 "flo")
 	echo DEVICE=flo >> .tmp-config &&
 	repo_sync $1
