@@ -160,9 +160,39 @@ case "$1" in
 	repo_sync $1
 	;;
 
+"emulator-arm64-l")
+	echo DEVICE=generic_arm64 >> .tmp-config &&
+	echo LUNCH=full_arm64-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
+"emulator-mips-jb"|"emulator-mips-kk"|"emulator-mips-l")
+	echo DEVICE=generic_mips >> .tmp-config &&
+	echo LUNCH=full_mips-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
+"emulator-mips64-l")
+	echo DEVICE=generic_mips64 >> .tmp-config &&
+	echo LUNCH=full_mips64-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
 "emulator-x86"|"emulator-x86-jb"|"emulator-x86-kk"|"emulator-x86-l")
 	echo DEVICE=generic_x86 >> .tmp-config &&
 	echo LUNCH=full_x86-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
+"emulator-x86_64-l")
+	echo DEVICE=generic_x86_64 >> .tmp-config &&
+	echo LUNCH=full_x86_64-eng >> .tmp-config &&
+	repo_sync $1
+	;;
+
+"emulator-x86_64-l")
+	echo DEVICE=generic_x86_64 >> .tmp-config &&
+	echo LUNCH=full_x86_64-eng >> .tmp-config &&
 	repo_sync $1
 	;;
 
@@ -223,13 +253,19 @@ case "$1" in
 	echo - aries "(Z3C KK)"
 	echo - aries-l "(Z3C L)"
 	echo - emulator
+	echo - emulator-arm64-l
 	echo - emulator-jb
 	echo - emulator-kk
 	echo - emulator-l
+	echo - emulator-mips-jb
+	echo - emulator-mips-kk
+	echo - emulator-mips-l
+	echo - emulator-mips64-l
 	echo - emulator-x86
 	echo - emulator-x86-jb
 	echo - emulator-x86-kk
 	echo - emulator-x86-l
+	echo - emulator-x86_64-l
 	exit -1
 	;;
 esac
